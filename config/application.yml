@@ -1,0 +1,77 @@
+server:
+    context-path: /
+    port: 8080
+
+logging:
+    config: config/log4j2.xml
+
+spring:
+    http:
+        encoding:
+            force: true
+        #上传文件的大小限制
+        multipart:
+            max-file-size: 10MB
+    redis:
+        host: localhost
+        port: 6379
+    datasource:
+        druid:
+            mysql:
+                driver-class-name: com.mysql.jdbc.Driver
+                password:
+                url: jdbc:mysql://localhost:3306/oms?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+                username: root
+            sqlServer:
+                driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+                password:
+                url: jdbc:sqlserver://localhost:1433;DatabaseName=pe81t-yidepiao-gq4w1
+                username: yidepiao
+            filter:
+                stat:
+                    merge-sql: true
+                    slow-sql-millis: 5000
+                wall:
+                    config:
+                        multi-statement-allow: true
+                        update-allow: true
+                    enabled: true
+            filters: wall,stat
+            initialSize: 1
+            logAbandoned: true
+            maxActive: 100
+            maxPoolPreparedStatementPerConnectionSize: 20
+            maxWait: 60000
+            minEvictableIdleTimeMillis: 300000
+            minIdle: 1
+            poolPreparedStatements: true
+            removeAbandoned: true
+            removeAbandonedTimeout: 180
+            testOnBorrow: false
+            testOnReturn: false
+            testWhileIdle: true
+            timeBetweenEvictionRunsMillis: 60000
+            validationQuery: SELECT 1
+
+#签名校验的url配置
+excludeURL: ''
+includeURL: /rest/terminalinter/**
+
+#七牛云配置
+accessKey: hCnErv6s7ltwwAp2OWuXac1qWx5VrKJjNMtacLit
+secretKey: NB1f9fT_BTQJCwOg1bG-IdelGTpJN-Kc6wwd5btm
+bucket: yiyutao
+fileUrl: http://ormclxivl.bkt.clouddn.com
+#上传文件到本地服务器的地址
+localFileDirectory: E:\upload\
+
+#session的过期时间，缓存过期时间与sessions过期时间一致
+sessionExpire:  3600
+
+#权限拦截设置，anon表示可以匿名访问，authc表示需要登录才能访问
+anon: /**
+authc:
+
+#新增用户默认密码
+defaultPassword: 123456
+
