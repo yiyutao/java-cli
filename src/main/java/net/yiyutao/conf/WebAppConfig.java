@@ -1,6 +1,5 @@
 package net.yiyutao.conf;
 
-import net.yiyutao.interceptor.CorsInterceptor;
 import net.yiyutao.interceptor.SignInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -26,12 +25,10 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
     public void addInterceptors(InterceptorRegistry registry) {
 
         SignInterceptor signInterceptor = new SignInterceptor();
-        CorsInterceptor corsInterceptor = new CorsInterceptor();
 
         String[] includeUrls = includeURL.split(",");
         String[] excludeUrls = excludeURL.split(",");
 
         registry.addInterceptor(signInterceptor).addPathPatterns(includeUrls).excludePathPatterns(excludeUrls);
-        registry.addInterceptor(corsInterceptor);
     }
 }

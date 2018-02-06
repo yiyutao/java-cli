@@ -8,6 +8,7 @@ import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSource
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.AbstractShiroFilter;
+import org.apache.shiro.web.servlet.OncePerRequestFilter;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
@@ -18,6 +19,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import javax.servlet.Filter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,10 +47,18 @@ public class ShiroConfiguration {
         return defaultWebSecurityManager;
     }
 
+    @Bean("corsFilter")
+    public OncePerRequestFilter corsFilter(){
+        return new CorsFilter();
+    }
+
     @Bean("shiroFilter")
-    public AbstractShiroFilter shiroFilter(@Qualifier("securityManager") SecurityManager manager) throws Exception {
+    public AbstractShiroFilter shiroFilter(@Qualifier("securityManager") SecurityManager manager, @Qualifier("corsFilter") OncePerRequestFilter corsFilter) throws Exception {
+        Map<String, Filter> filterMap = new HashMap<>();
+        filterMap.put("corsFilter", corsFilter);
         ShiroFilterFactoryBean bean = new ShiroFilterFactoryBean();
         bean.setSecurityManager(manager);
+        bean.setFilters(filterMap);
         return (AbstractShiroFilter) bean.getObject();
     }
 
